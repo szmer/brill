@@ -15,8 +15,8 @@ struct RulesApplier {
 	map<string,string> tag_lookup; // unigram table loaded from a file (for initial tagging)
 	Corpus * gold_corp; // gold standard Corpus
 
-	float baseline_score;
-	float final_score;
+	double baseline_score;
+	double final_score;
 } ;
 
 #endif

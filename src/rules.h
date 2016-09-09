@@ -7,9 +7,10 @@
 using namespace std;
 
 struct Rule {
+  string description();
 
 	string cue1;  // tag triggering the rule (when it is on relevant position)
-	string cue2;  // the second cue (in extended rules) 
+	string cue2;  // the second cue (in extended rules)
 
 	string alter_tag; // <- change this tag to:
 	string target; // result of the rule (tag which it changes to)
@@ -26,10 +27,10 @@ struct Rule {
         // (rule_number * RULE_RANGE + cue1_num * TAGSET_SIZE^2 + cue2_num * TAGSET_SIZE + target_tag_num)
         //
         // And for an extended rule:
-        // (rule_number * RULE_RANGE + cue1_num * TAGSET_SIZE^3 + cue2_num * TAGSET_SIZE^2 + TAGSET_SIZE * cue3_num 
+        // (rule_number * RULE_RANGE + cue1_num * TAGSET_SIZE^3 + cue2_num * TAGSET_SIZE^2 + TAGSET_SIZE * cue3_num
         //           + target_tag_num)
- 
- 
+
+
         //
         // *** Non-extended rules (taking two cues) ***
         //

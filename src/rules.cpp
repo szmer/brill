@@ -1,6 +1,40 @@
 #include <string>
 #include <vector>
 
+string Rule::description() {
+  string res;
+	res = "Change " + alter_tag + " to " + target + " when ";
+
+	if(id < (RL_PRECEDING+1) * RULE_RANGE)
+		res += "preceding tag is ";
+	if(id >= RL_FOLLOWING * RULE_RANGE && id < (RL_FOLLOWING+1) * RULE_RANGE)
+		res += "following tag is ";
+	if(id >= RL_2BEFORE * RULE_RANGE && id < (RL_2BEFORE+1) * RULE_RANGE)
+		res += "tag 2 before is ";
+	if(id >= RL_2AFTER * RULE_RANGE && id < (RL_2AFTER+1) * RULE_RANGE)
+		res += "tag 2 after is ";
+	if(id >= RL_ONE_OF_2BEFORE * RULE_RANGE && id < (RL_ONE_OF_2BEFORE+1) * RULE_RANGE)
+		res += "one of 2 tags before is ";
+	if(id >= RL_ONE_OF_2AFTER * RULE_RANGE && id < (RL_ONE_OF_2AFTER+1) * RULE_RANGE)
+		res += "one of 2 tags after is ";
+	if(id >= RL_ONE_OF_3BEFORE * RULE_RANGE && id < (RL_ONE_OF_3BEFORE+1) * RULE_RANGE)
+		res += "one of 3 tags before is ";
+	if(id >= RL_ONE_OF_3AFTER * RULE_RANGE && id < (RL_ONE_OF_3AFTER+1) * RULE_RANGE)
+		res += "one of 3 tags after is ";
+	if(id >= EXTRL_PRECEDING_AND_FOLLOWING * EXT_RULE_RANGE && id < (EXTRL_PRECEDING_AND_FOLLOWING+1) * EXT_RULE_RANGE)
+		res += "preceding and following tags are ";
+	if(id >= EXTRL_1_AND_2_BEFORE * EXT_RULE_RANGE && id < (EXTRL_1_AND_2_BEFORE+1) * EXT_RULE_RANGE)
+		res += "preceding and 2 before tags are ";
+	if(id >= EXTRL_1_AND_2_AFTER * EXT_RULE_RANGE && id < (EXTRL_1_AND_2_AFTER+1) * EXT_RULE_RANGE)
+		res += "following and 2 after tags are ";
+
+	res += cue1 + " ";
+	if(id >= EXT_RULE_RANGE)
+    res += "and " + cue2 + " ";
+
+  return res;
+}
+
 Corpus Rule::transform_corp(Corpus * corp) {
 
 	Corpus new_corp;

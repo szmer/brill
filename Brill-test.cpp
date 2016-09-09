@@ -1,13 +1,13 @@
 #include <iostream>
 #include <vector>
 
-#include "src/corpus.h" 
-#include "src/rules.h" 
-#include "src/rules_applier.h" 
+#include "src/corpus.h"
+#include "src/rules.h"
+#include "src/rules_applier.h"
 
-#include "src/corpus.cpp" 
-#include "src/rules.cpp" 
-#include "src/rules_applier.cpp" 
+#include "src/corpus.cpp"
+#include "src/rules.cpp"
+#include "src/rules_applier.cpp"
 
 using namespace std;
 

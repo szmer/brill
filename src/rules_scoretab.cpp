@@ -104,7 +104,7 @@ void RulesScoreTab::inc_bad_general(long long rule_ind_lowbnd, long long rule_in
 			throw "No good rules found";
 
 		// We must avoid dereferencing .end() iterator in the loop condition:
-		if(exam_ind == * eligible_rules.rbegin()) 
+		if(exam_ind == * eligible_rules.rbegin())
 			return;
 	}
 }
@@ -119,7 +119,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 		vector<TaggedWord> * gold_stc = & (*gold_corp).sentences[si];
 
 		for( int wi = 0; wi < stc->size(); wi++ ) {
-			
+
 			if(stc->at(wi).tag == gold_stc->at(wi).tag) // if classification is already true, we don't care
 				continue;
 
@@ -130,7 +130,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 			if(wi+1 != stc->size()) {
 				inc_good(RL_FOLLOWING, stc->at(wi+1).tag, stc->at(wi).tag, gold_stc->at(wi).tag);
 			}
-			if(wi > 1) { 
+			if(wi > 1) {
 				inc_good(RL_2BEFORE, stc->at(wi-2).tag, stc->at(wi).tag, gold_stc->at(wi).tag);
 
 				inc_good(RL_ONE_OF_2BEFORE, stc->at(wi-1).tag, stc->at(wi).tag, gold_stc->at(wi).tag);
@@ -148,7 +148,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 				inc_good_ext(EXTRL_1_AND_2_AFTER, stc->at(wi+1).tag, stc->at(wi+2).tag,
 					stc->at(wi).tag, gold_stc->at(wi).tag);
 			}
-			if(wi > 2) { 
+			if(wi > 2) {
 				inc_good(RL_ONE_OF_3BEFORE, stc->at(wi-1).tag, stc->at(wi).tag, gold_stc->at(wi).tag);
 				inc_good(RL_ONE_OF_3BEFORE, stc->at(wi-2).tag, stc->at(wi).tag, gold_stc->at(wi).tag);
 				inc_good(RL_ONE_OF_3BEFORE, stc->at(wi-3).tag, stc->at(wi).tag, gold_stc->at(wi).tag);
@@ -161,7 +161,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 			if(wi+1 != stc->size() && wi > 1)
 				inc_good_ext(EXTRL_PRECEDING_AND_FOLLOWING, stc->at(wi-1).tag, stc->at(wi+1).tag,
 					stc->at(wi).tag, gold_stc->at(wi).tag);
-				
+
 		}
 	}
 
@@ -172,7 +172,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 		vector<TaggedWord> * gold_stc = & (*gold_corp).sentences[si];
 
 		for( int wi = 0; wi < stc->size(); wi++ ) {
-			
+
 			#ifdef DUMP_WORDS
 			cout << stc->at(wi).word << " " << stc->at(wi).tag << endl << "======" << endl;
 			#endif
@@ -187,7 +187,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 				inc_bad(RL_PRECEDING, stc->at(wi-1).tag, stc->at(wi).tag);
 			if(wi+1 != stc->size())
 				inc_bad(RL_FOLLOWING, stc->at(wi+1).tag, stc->at(wi).tag);
-			if(wi > 1) { 
+			if(wi > 1) {
 				inc_bad(RL_2BEFORE, stc->at(wi-2).tag, stc->at(wi).tag);
 
 				inc_bad(RL_ONE_OF_2BEFORE, stc->at(wi-1).tag, stc->at(wi).tag);
@@ -205,7 +205,7 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 				inc_bad_ext(EXTRL_1_AND_2_AFTER, stc->at(wi+1).tag, stc->at(wi+2).tag,
 					stc->at(wi).tag);
 			}
-			if(wi > 2) { 
+			if(wi > 2) {
 				inc_bad(RL_ONE_OF_3BEFORE, stc->at(wi-1).tag, stc->at(wi).tag);
 				inc_bad(RL_ONE_OF_3BEFORE, stc->at(wi-2).tag, stc->at(wi).tag);
 				inc_bad(RL_ONE_OF_3BEFORE, stc->at(wi-3).tag, stc->at(wi).tag);
@@ -228,7 +228,6 @@ void RulesScoreTab::clear() {
 }
 
 Rule * RulesScoreTab::get_winner() {
-
 	RuleScore * winner_score;
 	winner_score = & tab[ *(eligible_rules.begin()) ];
 	// Look for a winner (one with better score than all already known):
@@ -239,36 +238,5 @@ Rule * RulesScoreTab::get_winner() {
 	Rule * winner;
 	winner = & winner_score->rule;
 
-	cout << winner->alter_tag << " to " << winner->target << " when ";
-	
-	if(winner->id < (RL_PRECEDING+1) * RULE_RANGE) 
-		cout << "preceding tag is ";
-	if(winner->id >= RL_FOLLOWING * RULE_RANGE && winner->id < (RL_FOLLOWING+1) * RULE_RANGE)
-		cout << "following tag is ";
-	if(winner->id >= RL_2BEFORE * RULE_RANGE && winner->id < (RL_2BEFORE+1) * RULE_RANGE)
-		cout << "tag 2 before is ";
-	if(winner->id >= RL_2AFTER * RULE_RANGE && winner->id < (RL_2AFTER+1) * RULE_RANGE)
-		cout << "tag 2 after is ";
-	if(winner->id >= RL_ONE_OF_2BEFORE * RULE_RANGE && winner->id < (RL_ONE_OF_2BEFORE+1) * RULE_RANGE)
-		cout << "one of 2 tags before is ";
-	if(winner->id >= RL_ONE_OF_2AFTER * RULE_RANGE && winner->id < (RL_ONE_OF_2AFTER+1) * RULE_RANGE)
-		cout << "one of 2 tags after is ";
-	if(winner->id >= RL_ONE_OF_3BEFORE * RULE_RANGE && winner->id < (RL_ONE_OF_3BEFORE+1) * RULE_RANGE)
-		cout << "one of 3 tags before is ";
-	if(winner->id >= RL_ONE_OF_3AFTER * RULE_RANGE && winner->id < (RL_ONE_OF_3AFTER+1) * RULE_RANGE)
-		cout << "one of 3 tags after is ";
-	if(winner->id >= EXTRL_PRECEDING_AND_FOLLOWING * EXT_RULE_RANGE
-			&& winner->id < (EXTRL_PRECEDING_AND_FOLLOWING+1) * EXT_RULE_RANGE) 
-		cout << "preceding and following tags are ";
-	if(winner->id >= EXTRL_1_AND_2_BEFORE * EXT_RULE_RANGE
-			&& winner->id < (EXTRL_1_AND_2_BEFORE+1) * EXT_RULE_RANGE) 
-		cout << "preceding and 2 before tags are ";
-	if(winner->id >= EXTRL_1_AND_2_AFTER * EXT_RULE_RANGE
-			&& winner->id < (EXTRL_1_AND_2_AFTER+1) * EXT_RULE_RANGE) 
-		cout << "following and 2 after tags are ";
-
-	cout << winner->cue1 << " ";
-	if(winner->id >= EXT_RULE_RANGE) cout << "and " << winner->cue2 << " ";
-
-	return winner; 
+	return winner;
 }
