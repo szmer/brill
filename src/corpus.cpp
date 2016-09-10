@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "corpus.h"
+
 using namespace std;
 
 // compare_corpora: return fraction of <word, tag> pairs that DO match between these.
@@ -13,13 +15,13 @@ double Corpus::compare_corpora(Corpus * fst, Corpus * sec) {
 	int word_count = 0;
 	int err_count = 0;
 
-	for(int si = 0; si < fst->sentences.size(); si++) {
+	for(unsigned int si = 0; si < fst->sentences.size(); si++) {
 		if(fst->sentences[si].size() != sec->sentences[si].size())
 			throw "compare_corpora: unequal size of one of the sentences!";
 
 		word_count += fst->sentences[si].size(); // count each word
 
-		for(int wi = 0; wi < fst->sentences[si].size(); wi++) // find actual disagreements
+		for(unsigned int wi = 0; wi < fst->sentences[si].size(); wi++) // find actual disagreements
 			if(fst->sentences[si][wi].tag != sec->sentences[si][wi].tag)
 				err_count ++;
 	}
@@ -55,7 +57,7 @@ Corpus Corpus::load_file(const char* fname) {
 
 		// ELSE: add new tagged word to the latest sentence vector.
 		int tab_ind = corp_file_line.find("\t");
-		if(tab_ind == -1 || tab_ind != corp_file_line.rfind("\t"))
+		if(tab_ind == -1 || tab_ind != (int)corp_file_line.rfind("\t"))
 			throw "load_file: line in corpus \""+corp_file_line+"\" is improperly formatted!";
 
 		string tag = corp_file_line.substr(tab_ind+1);
@@ -116,7 +118,7 @@ Corpus Corpus::tag_all_unigram(bool leave_table) {
 	// Go through the words in the child Corpus and tag each with the most frequent tag.
 	for(vector< vector<TaggedWord> >::iterator stc = child.sentences.begin(); stc != child.sentences.end()
 						; stc++) 
-		for(int wi = 0; wi < stc->size(); wi ++) {
+		for(unsigned int wi = 0; wi < stc->size(); wi ++) {
 
 			TaggedWord * tword = & stc->at(wi);
 	
@@ -179,7 +181,7 @@ Corpus Corpus::tag_with_table(map<string,string> * tbl) {
 	Corpus child;
 	child.sentences.reserve(sentences.size());
 
-	for( int si = 0; si < sentences.size(); si++ ) {
+	for( unsigned int si = 0; si < sentences.size(); si++ ) {
 
 		vector<TaggedWord> * stc = & sentences[si];
 
@@ -187,7 +189,7 @@ Corpus Corpus::tag_with_table(map<string,string> * tbl) {
 		child.sentences.rbegin()->reserve( stc->size() );	// reserve space in the last sentence
 									// vector of the child
 
-		for( int wi = 0; wi < stc->size(); wi++ ) {
+		for( unsigned int wi = 0; wi < stc->size(); wi++ ) {
 			if(tbl->find(stc->at(wi).word) != tbl->end()) // we know exact tag for this word
 				child.sentences.rbegin()->push_back( TaggedWord(stc->at(wi).word,
 									(*tbl)[stc->at(wi).word]) );

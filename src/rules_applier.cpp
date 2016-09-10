@@ -3,8 +3,13 @@
 
 #include <cmath>
 #include <cstring>
+#include <fstream>
 #include <string>
 #include <vector>
+
+#include "corpus.h"
+#include "rules.h"
+#include "rules_applier.h"
 
 using namespace std;
 
@@ -14,7 +19,7 @@ static long long atoi_longlong(char * str) {
 
 	for(int i = 0; i < len; i++)
 		num += pow(10, (len-i-1)) * (str[i] - 48); // 48 being '0' ASCII value
-	
+
 	return num;
 }
 
@@ -60,7 +65,7 @@ RulesApplier::RulesApplier(const char * tgfname, const char * rlfname, Corpus * 
 }
 
 Corpus RulesApplier::transform(Corpus * corp) {
-	
+
 	Corpus next_corp = * corp;
 
 	// Tag with loaded initial (unigram) tagger. 
@@ -68,10 +73,9 @@ Corpus RulesApplier::transform(Corpus * corp) {
 	baseline_score = Corpus::compare_corpora( gold_corp, & next_corp);
 
 	// Apply each rule on the list consecutively.
-	for(int i = 0; i < rules.size(); i++) {
+	for(unsigned int i = 0; i < rules.size(); i++) {
 
 		// Figure out what rule this is.
-		bool extended = false;
 		int rule_type = -1;
 		string cue1, cue2, alter_tag, target;
 
@@ -79,7 +83,6 @@ Corpus RulesApplier::transform(Corpus * corp) {
 			long long rule_ind = rules[i]; // temporary variable that will be stripped
 
 			rule_type = rule_ind / EXT_RULE_RANGE; // nice that int will strip the remainder
-			extended = true;
 			rule_ind -= rule_type * EXT_RULE_RANGE;
 
 			int tag_id = rule_ind / pow(tag_index.size(), 3);

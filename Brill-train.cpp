@@ -93,7 +93,7 @@ int main(int argc, char * argv[]) {
 			try { tab.examine(& old_corp); }
 			catch(const char * e) { // if the program couldn't find any new good rules, just terminate
 						// the loop, and rethrow any other exception
-				if(e == "No good rules found")	break;
+				if(strcmp(e,"No good rules found") == 0)	break;
 				else	throw e;
 			}
 

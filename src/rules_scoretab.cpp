@@ -5,6 +5,10 @@
 
 using namespace std;
 
+#include "corpus.h"
+#include "rules.h"
+#include "rules_scoretab.h"
+
 RuleScore::RuleScore(string cue1, string cue2, string alter_tag, string target, long long id) {
 	good = bad = 0;
 
@@ -20,7 +24,7 @@ RulesScoreTab::RulesScoreTab(vector<string> & tagset, Corpus * standard) {
 
 	gold_corp = standard;
 
-	for(int i = 0; i < tagset.size(); i++) 
+	for(unsigned int i = 0; i < tagset.size(); i++) 
 		tag_index[ tagset[i] ] = i; // give the tag a consistent number
 }
 
@@ -113,12 +117,12 @@ void RulesScoreTab::inc_bad_general(long long rule_ind_lowbnd, long long rule_in
 void RulesScoreTab::examine(Corpus * test_corp) {
 
 	// Find errors in the test corpus, and rules that potentially correct them.
-	for( int si = 0; si < test_corp->sentences.size(); si++ ) {
+	for( unsigned int si = 0; si < test_corp->sentences.size(); si++ ) {
 
 		vector<TaggedWord> * stc = & (*test_corp).sentences[si];
 		vector<TaggedWord> * gold_stc = & (*gold_corp).sentences[si];
 
-		for( int wi = 0; wi < stc->size(); wi++ ) {
+		for( unsigned int wi = 0; wi < stc->size(); wi++ ) {
 
 			if(stc->at(wi).tag == gold_stc->at(wi).tag) // if classification is already true, we don't care
 				continue;
@@ -166,12 +170,12 @@ void RulesScoreTab::examine(Corpus * test_corp) {
 	}
 
 	// Assign "bad" scores to the eligible rules.
-	for( int si = 0; si < test_corp->sentences.size(); si++ ) {
+	for( unsigned int si = 0; si < test_corp->sentences.size(); si++ ) {
 
 		vector<TaggedWord> * stc = & (*test_corp).sentences[si];
 		vector<TaggedWord> * gold_stc = & (*gold_corp).sentences[si];
 
-		for( int wi = 0; wi < stc->size(); wi++ ) {
+		for( unsigned int wi = 0; wi < stc->size(); wi++ ) {
 
 			#ifdef DUMP_WORDS
 			cout << stc->at(wi).word << " " << stc->at(wi).tag << endl << "======" << endl;
