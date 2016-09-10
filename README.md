@@ -2,6 +2,7 @@
 This is a transformational part-of-speech tagger, implementing 8 basic rule templates from the classic Brill paper [1]:
 
 > **Change tag a to tag b when**:
+>
 > 1. The preceding (following) word is w.
 > 2. The word two before (after) is w.
 > 3. One of the two preceding (following) words is w.
@@ -13,6 +14,7 @@ This is a transformational part-of-speech tagger, implementing 8 basic rule temp
 
 ## Howto
 Installation:
+
 1. `git clone https://github.com/szmer/brill.git`
 2. `cd brill`
 3. `make && make clean`
